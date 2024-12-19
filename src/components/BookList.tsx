@@ -1,66 +1,66 @@
+// src/components/BookList.tsx
 import React, { useEffect, useState } from "react";
-import { fetchBooks, Book } from "../services/API";
+import { fetchGoogleBooks } from "../services/googleBooksAPI";
+import { fetchOpenLibraryBooks } from "../services/openLibraryAPI";
+import BookSection from "./BookSection";
 
 function BookList() {
-  const [books, setBooks] = useState<Book[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [googleBooks, setGoogleBooks] = useState([]);
+  const [openLibraryBooks, setOpenLibraryBooks] = useState([]);
+  const [loadingGoogle, setLoadingGoogle] = useState(true);
+  const [loadingOpenLibrary, setLoadingOpenLibrary] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  // Cargar libros de Google Books
   useEffect(() => {
-    const fetchBookData = async () => {
+    const fetchGoogleData = async () => {
       try {
-        const booksData = await fetchBooks("flowers+inauthor:keyes");
-        setBooks(booksData);
+        const booksData = await fetchGoogleBooks("flowers+inauthor:keyes");
+        setGoogleBooks(booksData);
       } catch (error) {
-        setError("No se pudieron obtener los libros.");
+        setError("No se pudieron obtener los libros de Google.");
       } finally {
-        setLoading(false);
+        setLoadingGoogle(false);
       }
     };
 
-    fetchBookData();
+    fetchGoogleData();
   }, []);
 
-  if (error) {
-    return <div className="text-red-500 text-center">{error}</div>;
-  }
+  // Cargar libros de Open Library
+  useEffect(() => {
+    const fetchOpenLibraryData = async () => {
+      try {
+        const booksData = await fetchOpenLibraryBooks("flowers+inauthor:keyes");
+        setOpenLibraryBooks(booksData);
+      } catch (error) {
+        setError("No se pudieron obtener los libros de Open Library.");
+      } finally {
+        setLoadingOpenLibrary(false);
+      }
+    };
 
-  if (loading) {
-    return <div className="text-center text-gray-500">Cargando libros...</div>;
-  }
-
-  const displayedBooks = books.slice(3, 10);
+    fetchOpenLibraryData();
+  }, []);
 
   return (
-    <section className="bg-[#191919c1]">
-      <div className="grid grid-cols-2 md:grid-cols-5 gap-4 bg-[#1c1c1c63] py-10 px-6">
-        {displayedBooks.map((book) => (
-          <div key={book.id}
-            className="max-w-sm rounded-lg overflow-hidden hover:shadow-2xl border bg-[#fff]"
-          >
-            <div className="py-3 px-3">
-              <img className="h-56 w-full object-cover"
-                src={ book.volumeInfo.imageLinks?.thumbnail || "https://via.placeholder.com/300x200" }
-                alt={book.volumeInfo.title}
-              />
-            </div>
+    <section>
+      <div className="space-y-8">
+        {/* Google Books */}
+        <BookSection
+          title="Libros de Google"
+          books={googleBooks}
+          loading={loadingGoogle}
+          error={error}
+        />
 
-            <div className="p-4 text-center">
-              <h3 className="font-bold text-lg lg:text-xl text-gray-900 uppercase">
-                {book.volumeInfo.title}
-              </h3>
-              <p className="text-gray-700 text-sm">
-                {book.volumeInfo.authors?.join(", ") || "Autor desconocido"}
-              </p>
-
-              <div className="p-4 text-center">
-                <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded transition duration-200">
-                  Ver más
-                </button>
-              </div>
-            </div>
-          </div>
-        ))}
+        {/* Open Library */}
+        <BookSection
+          title="Libros de Open Library"
+          books={openLibraryBooks}
+          loading={loadingOpenLibrary}
+          error={error}
+        />
       </div>
     </section>
   );

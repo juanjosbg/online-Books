@@ -1,48 +1,36 @@
-// src/App.tsx
+import React, { useState } from "react";
 import "./App.css";
-import ContBooks from "./pages/ContBook";
 import SearchBook from "./components/SearchBook";
+import BookList from "./components/BookList";
+import Sidebar from "./components/Sidebar";
 
 function App() {
+  const [selectedGenre, setSelectedGenre] = useState<string | null>(null);
+
+  const genres = ["Fiction", "Romance", "Programming", "Adventure", "Mystery"];
+
+  const handleGenreSelect = (genre: string) => {
+    setSelectedGenre(genre);
+    console.log(`Selected genre: ${genre}`);
+  };
+
   return (
     <section>
       <div className="min-h-screen flex">
-        <aside className="md:w-1/4 bg-[#ced7de] p-4">
-          <header>
-            <div className="mx-auto max-w-7xl px-4 py-2 sm:px-6 lg:px-8">
-              <h2 className="text-2xl tracking-tight text-white uppercase font-bold ml-4">
-                Parte del Profile
-              </h2>
-            </div>
-          </header>
+        {/* Sidebar */}
+        <Sidebar genres={genres} onGenreSelect={handleGenreSelect} />
 
-          <div className="mb-6">
-            .......
+        {/* Main Content */}
+        <main className="w-3/4 bg-[#8496a2]">
+          <div className="px-4 py-6 sm:px-6 lg:px-8 bg-whiteCont3">
+            <SearchBook />
           </div>
-
-          <hr />
-          <div className="mx-auto max-w-7xl px-4 py-2 sm:px-6 lg:px-8 mt-3 h-auto mb-4">
-            <label className="block text-sm font-semibold text-white mb-2">
-              Libros Favoritos
-            </label>
-          </div>
-
-          <hr />
-
-          <div className="mx-auto max-w-7xl px-4 py-2 sm:px-6 lg:px-8 mt-3 h-auto mb-4">
-            <label className="block text-sm font-semibold text-white mb-2">
-              Generos
-            </label>
-            <br />
-            <div className="container mx-auto flex flex-col">dsdsd</div>
-          </div>
-        </aside>
-
-        <main className="w-3/4 bg-[#e1e1e1]">
           <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-            <SearchBook/>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              ----
+            <h2 className="text-xl font-bold text-black">
+              {selectedGenre ? `Books in ${selectedGenre}` : "Select a Genre"}
+            </h2>
+            <div className="gap-4 mt-5">
+              <BookList />
             </div>
           </div>
         </main>
