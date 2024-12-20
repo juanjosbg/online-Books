@@ -1,5 +1,5 @@
 // src/services/combinedAPI.ts
-import { fetchBooks as fetchGoogleBooks, Book } from './googleBooksAPI';
+import { fetchGoogleBooks, Book } from './googleBooksAPI';
 import { fetchOpenLibraryBooks, OpenLibraryBook } from './openLibraryAPI';
 
 export interface UnifiedBook {
@@ -7,6 +7,7 @@ export interface UnifiedBook {
   title: string;
   authors: string[];
   description: string;
+  imageUrl?: string; // La URL de la imagen, si está disponible
   source: "GoogleBooks" | "OpenLibrary"; // Identifica de dónde proviene el libro
 }
 
@@ -24,6 +25,7 @@ export const fetchCombinedBooks = async (searchQuery: string): Promise<UnifiedBo
         title: book.volumeInfo.title,
         authors: book.volumeInfo.authors || [],
         description: book.volumeInfo.description || "No description available.",
+        imageUrl: book.volumeInfo.imageLinks?.thumbnail || null, // Si tiene imagen
         source: "GoogleBooks",
       })),
       ...openLibraryBooks.map((book) => ({
@@ -31,6 +33,9 @@ export const fetchCombinedBooks = async (searchQuery: string): Promise<UnifiedBo
         title: book.title,
         authors: book.authors?.map((author) => author.name) || [],
         description: book.description || "No description available.",
+        imageUrl: book.cover_i
+          ? `https://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg`
+          : null, // Si no tiene imagen, se pone null
         source: "OpenLibrary",
       })),
     ];

@@ -4,26 +4,35 @@ import React from "react";
 interface BookCardProps {
   title: string;
   authors: string[];
-  imageUrl: string;
+  description: string;
+  imageUrl?: string;
   source: string;
 }
 
-const BookCard: React.FC<BookCardProps> = ({ title, authors, imageUrl, source }) => {
+const BookCard: React.FC<BookCardProps> = ({
+  title,
+  authors,
+  imageUrl,
+  source,
+}) => {
   return (
-    <div className="max-w-sm rounded-lg overflow-hidden hover:shadow-2xl border bg-[#fff]">
-      <div className="py-3 px-3">
-        <img className="h-56 w-full object-cover" src={imageUrl} alt={title} />
-      </div>
-      <div className="p-4 text-center">
-        <h3 className="font-bold text-lg lg:text-xl text-gray-900 uppercase">{title}</h3>
-        <p className="text-gray-700 text-sm">{authors?.join(", ") || "Autor desconocido"}</p>
-        <div className="p-4 text-center">
-          <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded transition duration-200">
-            Ver más
-          </button>
+    <div className="book-card rounded-lg hover:shadow-md hover:pb-4 flex flex-col items-center">
+      {imageUrl ? (
+        <img
+          src={imageUrl}
+          alt={`Cover of ${title}`}
+          className="w-full h-50 mb-4 object-cover" // Ajuste para que la imagen se recorte correctamente
+          loading="lazy"
+        />
+      ) : (
+        <div className="w-24 h-36 mb-4 bg-gray-200 flex items-center justify-center text-gray-500">
+          No Image
         </div>
-        <small>{source}</small>
-      </div>
+      )}
+
+      <h2 className="font-bold text-lg text-center">{title}</h2>
+      {{/* <p className="text-sm text-gray-600 text-center">by {authors.join(", ")}</p> */}}
+      <span className="text-xs text-blue-500 mt-2 block text-center">Source: {source}</span>
     </div>
   );
 };

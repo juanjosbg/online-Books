@@ -1,69 +1,54 @@
 // src/components/BookList.tsx
 import React, { useEffect, useState } from "react";
-import { fetchGoogleBooks } from "../services/googleBooksAPI";
-import { fetchOpenLibraryBooks } from "../services/openLibraryAPI";
-import BookSection from "./BookSection";
+import { fetchCombinedBooks, UnifiedBook } from "../services/combinedAPI";
+import BookCard from "./BookCard";
 
-function BookList() {
-  const [googleBooks, setGoogleBooks] = useState([]);
-  const [openLibraryBooks, setOpenLibraryBooks] = useState([]);
-  const [loadingGoogle, setLoadingGoogle] = useState(true);
-  const [loadingOpenLibrary, setLoadingOpenLibrary] = useState(true);
+const BookList: React.FC = () => {
+  const [loading, setLoading] = useState(true);
+  const [books, setBooks] = useState<UnifiedBook[]>([]);
   const [error, setError] = useState<string | null>(null);
 
-  // Cargar libros de Google Books
   useEffect(() => {
-    const fetchGoogleData = async () => {
+    const fetchBooks = async () => {
       try {
-        const booksData = await fetchGoogleBooks("flowers+inauthor:keyes");
-        setGoogleBooks(booksData);
+        const combinedBooks = await fetchCombinedBooks("flowers+inauthor:keyes");
+
+        // Seleccionamos 15 libros aleatorios para mostrar cada vez
+        const randomBooks = getRandomBooks(combinedBooks, 15);
+        setBooks(randomBooks);
       } catch (error) {
-        setError("No se pudieron obtener los libros de Google.");
+        setError("Error fetching books.");
       } finally {
-        setLoadingGoogle(false);
+        setLoading(false);
       }
     };
 
-    fetchGoogleData();
-  }, []);
+    fetchBooks();
+  }, []); // Se ejecuta solo cuando el componente se monta (recarga de página)
 
-  // Cargar libros de Open Library
-  useEffect(() => {
-    const fetchOpenLibraryData = async () => {
-      try {
-        const booksData = await fetchOpenLibraryBooks("flowers+inauthor:keyes");
-        setOpenLibraryBooks(booksData);
-      } catch (error) {
-        setError("No se pudieron obtener los libros de Open Library.");
-      } finally {
-        setLoadingOpenLibrary(false);
-      }
-    };
+  // Función para obtener n libros aleatorios
+  const getRandomBooks = (books: UnifiedBook[], count: number): UnifiedBook[] => {
+    const shuffledBooks = books.sort(() => 0.5 - Math.random());
+    return shuffledBooks.slice(0, count);
+  };
 
-    fetchOpenLibraryData();
-  }, []);
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>{error}</p>;
 
   return (
-    <section>
-      <div className="space-y-8">
-        {/* Google Books */}
-        <BookSection
-          title="Libros de Google"
-          books={googleBooks}
-          loading={loadingGoogle}
-          error={error}
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 p-4">
+      {books.map((book) => (
+        <BookCard
+          key={book.id}
+          title={book.title}
+          authors={book.authors}
+          description={book.description}
+          imageUrl={book.imageUrl || undefined}
+          source={book.source}
         />
-
-        {/* Open Library */}
-        <BookSection
-          title="Libros de Open Library"
-          books={openLibraryBooks}
-          loading={loadingOpenLibrary}
-          error={error}
-        />
-      </div>
-    </section>
+      ))}
+    </div>
   );
-}
+};
 
 export default BookList;

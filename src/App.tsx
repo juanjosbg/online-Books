@@ -3,15 +3,28 @@ import "./App.css";
 import SearchBook from "./components/SearchBook";
 import BookList from "./components/BookList";
 import Sidebar from "./components/Sidebar";
+import SearchResults from "./components/SearchResults";
 
 function App() {
   const [selectedGenre, setSelectedGenre] = useState<string | null>(null);
+  const [searchResults, setSearchResults] = useState<any[]>([]); // Almacena los resultados de búsqueda
+  const [isSearching, setIsSearching] = useState<boolean>(false); // Controla si se está buscando
 
   const genres = ["Fiction", "Romance", "Programming", "Adventure", "Mystery"];
 
   const handleGenreSelect = (genre: string) => {
     setSelectedGenre(genre);
     console.log(`Selected genre: ${genre}`);
+  };
+
+  const handleSearch = (results: any[]) => {
+    setSearchResults(results);
+    setIsSearching(true); // Activa la vista de resultados de búsqueda
+  };
+
+  const handleCancelSearch = () => {
+    setIsSearching(false); // Regresa a la vista original
+    setSearchResults([]); // Limpia los resultados
   };
 
   return (
@@ -23,14 +36,22 @@ function App() {
         {/* Main Content */}
         <main className="w-3/4 bg-[#8496a2]">
           <div className="px-4 py-6 sm:px-6 lg:px-8 bg-whiteCont3">
-            <SearchBook />
+            <SearchBook onSearch={handleSearch} onCancelSearch={handleCancelSearch} />
           </div>
           <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
             <h2 className="text-xl font-bold text-black">
-              {selectedGenre ? `Books in ${selectedGenre}` : "Select a Genre"}
+              {isSearching
+                ? "Search Results"
+                : selectedGenre
+                ? `Books in ${selectedGenre}`
+                : "Select a Genre"}
             </h2>
             <div className="gap-4 mt-5">
-              <BookList />
+              {isSearching ? (
+                <SearchResults results={searchResults} />
+              ) : (
+                <BookList />
+              )}
             </div>
           </div>
         </main>
