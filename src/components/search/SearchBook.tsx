@@ -5,10 +5,7 @@ interface SearchBookProps {
   onCancelSearch: () => void;
 }
 
-const SearchBook: React.FC<SearchBookProps> = ({
-  onSearch,
-  onCancelSearch,
-}) => {
+const SearchBook: React.FC<SearchBookProps> = ({ onSearch, onCancelSearch }) => {
   const [query, setQuery] = useState("");
   const [error, setError] = useState<string | null>(null);
 
@@ -16,14 +13,15 @@ const SearchBook: React.FC<SearchBookProps> = ({
     e.preventDefault();
     setError(null);
 
-    if (!query) {
+    if (!query.trim()) {
       setError("Please enter a search term");
       return;
     }
 
     try {
+      // Fetch Google Books data
       const googleBooksResponse = await fetch(
-        `https://www.googleapis.com/books/v1/volumes?q=${query}`
+        `https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(query)}`
       );
       const googleBooksData = await googleBooksResponse.json();
 
@@ -32,31 +30,27 @@ const SearchBook: React.FC<SearchBookProps> = ({
         return;
       }
 
+      // Fetch Open Library data
       const openLibraryResponse = await fetch(
-        `https://openlibrary.org/search.json?q=${query}`
+        `https://openlibrary.org/search.json?q=${encodeURIComponent(query)}`
       );
       const openLibraryData = await openLibraryResponse.json();
 
       if (openLibraryData.docs?.length) {
         onSearch(openLibraryData.docs);
       } else {
-        setError("No results found in either Google Books or OpenLibrary.");
+        setError("No results found in either Google Books or Open Library.");
       }
     } catch (err) {
-      setError("An error occurred while searching.");
+      console.error("Search error:", err);
+      setError("An error occurred while searching. Please try again later.");
     }
   };
 
   return (
     <div>
-      <form
-        onSubmit={handleSearch}
-        className="flex items-center justify-between space-x-4"
-      >
-        <div className="uppercase font-bold text-lg">
-          <h2>LOGO</h2>
-        </div>
-
+      <form onSubmit={handleSearch} className="flex items-center space-x-4">
+        <h2 className="uppercase font-bold text-lg">LOGO</h2>
         <input
           type="text"
           value={query}
@@ -71,12 +65,11 @@ const SearchBook: React.FC<SearchBookProps> = ({
         >
           X
         </button>
-
         <button
           type="submit"
           className="ml-4 bg-teal-500 text-white px-4 py-2 rounded"
         >
-          Register
+          Search
         </button>
       </form>
       {error && <div className="text-red-500 mt-2">{error}</div>}

@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import "./App.css";
-import SearchBook from "./components/SearchBook";
-import BookList from "./components/BookList";
-import Sidebar from "./components/Sidebar";
-import SearchResults from "./components/SearchResults";
+import Home from "./Pages/Home";
+import Sidebar from "./components/search/Sidebar";
+import SearchBook from "./components/search/SearchBook";
+import SearchResults from "./components/search/SearchResults";
 
 function App() {
   const [selectedGenre, setSelectedGenre] = useState<string | null>(null);
-  const [searchResults, setSearchResults] = useState<any[]>([]); // Almacena los resultados de búsqueda
-  const [isSearching, setIsSearching] = useState<boolean>(false); // Controla si se está buscando
+  const [searchResults, setSearchResults] = useState<any[]>([]);
+  const [isSearching, setIsSearching] = useState<boolean>(false);
 
   const genres = ["Fiction", "Romance", "Programming", "Adventure", "Mystery"];
 
@@ -19,12 +19,12 @@ function App() {
 
   const handleSearch = (results: any[]) => {
     setSearchResults(results);
-    setIsSearching(true); // Activa la vista de resultados de búsqueda
+    setIsSearching(true);
   };
 
   const handleCancelSearch = () => {
-    setIsSearching(false); // Regresa a la vista original
-    setSearchResults([]); // Limpia los resultados
+    setIsSearching(false);
+    setSearchResults([]);
   };
 
   return (
@@ -50,7 +50,7 @@ function App() {
               {isSearching ? (
                 <SearchResults results={searchResults} />
               ) : (
-                <BookList />
+                <Home />
               )}
             </div>
           </div>

@@ -1,4 +1,3 @@
-// src/components/BookCard.tsx
 import React from "react";
 
 interface BookCardProps {
@@ -6,33 +5,17 @@ interface BookCardProps {
   authors: string[];
   description: string;
   imageUrl?: string;
-  source: string;
 }
 
-const BookCard: React.FC<BookCardProps> = ({
-  title,
-  authors,
-  imageUrl,
-  source,
-}) => {
+const BookCard: React.FC<BookCardProps> = ({ title, authors, description, imageUrl }) => {
   return (
-    <div className="book-card rounded-lg hover:shadow-md hover:pb-4 flex flex-col items-center">
-      {imageUrl ? (
-        <img
-          src={imageUrl}
-          alt={`Cover of ${title}`}
-          className="w-full h-50 mb-4 object-cover" // Ajuste para que la imagen se recorte correctamente
-          loading="lazy"
-        />
-      ) : (
-        <div className="w-24 h-36 mb-4 bg-gray-200 flex items-center justify-center text-gray-500">
-          No Image
-        </div>
-      )}
-
-      <h2 className="font-bold text-lg text-center">{title}</h2>
-      {{/* <p className="text-sm text-gray-600 text-center">by {authors.join(", ")}</p> */}}
-      <span className="text-xs text-blue-500 mt-2 block text-center">Source: {source}</span>
+    <div className="bg-white rounded-lg shadow-md overflow-hidden">
+      {imageUrl && <img src={imageUrl} alt={title} className="w-full h-48 object-cover" />}
+      <div className="p-4">
+        <h3 className="text-xl font-bold">{title}</h3>
+        <p className="text-gray-700">By: {authors.join(", ")}</p>
+        <p className="mt-2 text-sm">{description}</p>
+      </div>
     </div>
   );
 };
