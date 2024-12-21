@@ -17,7 +17,7 @@ interface SearchResultsProps {
 
 const SearchResults: React.FC<SearchResultsProps> = ({ results }) => {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+    <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
       {results.map((result, index) => {
         const title = result.volumeInfo?.title || result.title || "Untitled";
         const authors =
@@ -33,15 +33,15 @@ const SearchResults: React.FC<SearchResultsProps> = ({ results }) => {
         return (
           <div
             key={index}
-            className="border p-4 rounded shadow flex flex-col items-center"
+            className="bg-greenCont2 p-2 rounded-md flex flex-col items-center"
           >
             <img
               src={image}
               alt={title}
-              className="w-32 h-48 object-cover mb-4"
+              className="w-full h-72 object-cover mb-4 hover:shadow"
             />
-            <h3 className="font-bold text-center">{title}</h3>
-            <p className="text-sm text-gray-600">{authors}</p>
+            <h3 className="font-bold uppercase text-center text-lg">{title}</h3>
+            <p className="text-sm text-gray-600 text-center pb-3">{authors}</p>
           </div>
         );
       })}

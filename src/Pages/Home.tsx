@@ -3,7 +3,7 @@ import useBooks from "../hooks/useBooks";
 import BookCard from "../components/BookCard";
 
 const Home: React.FC = () => {
-  const { books, loading, error } = useBooks("flowers inauthor:keyes");
+  const { books, loading, error } = useBooks("flowers");
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>{error}</p>;

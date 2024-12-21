@@ -4,18 +4,15 @@ interface BookCardProps {
   title: string;
   authors: string[];
   description: string;
-  imageUrl?: string;
+  imageUrl: string | null;
 }
 
-const BookCard: React.FC<BookCardProps> = ({ title, authors, description, imageUrl }) => {
+const BookCard: React.FC<BookCardProps> = ({ title, authors, imageUrl }) => {
   return (
-    <div className="bg-white rounded-lg shadow-md overflow-hidden">
-      {imageUrl && <img src={imageUrl} alt={title} className="w-full h-48 object-cover" />}
-      <div className="p-4">
-        <h3 className="text-xl font-bold">{title}</h3>
-        <p className="text-gray-700">By: {authors.join(", ")}</p>
-        <p className="mt-2 text-sm">{description}</p>
-      </div>
+    <div className="bg-greenCont2 p-2 rounded-md">
+      {imageUrl && <img src={imageUrl} alt={title} className="w-full h-80 object-cover mb-4 hover:shadow"/>}
+      <h2 className="font-bold uppercase text-center text-xl">{title}</h2>
+      <p className="text-sm text-gray-600 text-center pb-3">By: {authors.join(", ")}</p>
     </div>
   );
 };

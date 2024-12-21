@@ -14,6 +14,7 @@ function App() {
 
   const handleGenreSelect = (genre: string) => {
     setSelectedGenre(genre);
+    setIsSearching(false); // Cancelar búsqueda al cambiar de género
     console.log(`Selected genre: ${genre}`);
   };
 
@@ -34,7 +35,7 @@ function App() {
         <Sidebar genres={genres} onGenreSelect={handleGenreSelect} />
 
         {/* Main Content */}
-        <main className="w-3/4 bg-[#8496a2]">
+        <main className="w-3/7 bg-greenCont2">
           <div className="px-4 py-6 sm:px-6 lg:px-8 bg-whiteCont3">
             <SearchBook onSearch={handleSearch} onCancelSearch={handleCancelSearch} />
           </div>
@@ -50,7 +51,7 @@ function App() {
               {isSearching ? (
                 <SearchResults results={searchResults} />
               ) : (
-                <Home />
+                <Home selectedGenre={selectedGenre} />
               )}
             </div>
           </div>

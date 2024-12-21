@@ -7,29 +7,33 @@ interface SidebarProps {
 
 const Sidebar: React.FC<SidebarProps> = ({ genres, onGenreSelect }) => {
   return (
-    <aside className="md:w-1/4 bg-white p-4">
+    <aside className="md:w-1/5 bg-white p-4">
       <div className="flex flex-col items-center">
         {/* Profile Section */}
-        <div className="text-center mb-6 mt-4">
-          <img
-            src="https://cdn.pixabay.com/photo/2022/11/08/06/26/woman-7577808_1280.jpg"
-            alt="Profile Avatar"
-            className="w-32 h-32 rounded-full mx-auto object-cover"
-          />
-          <h3 className="mt-4 text-lg font-bold text-black">Bogdan Nikitin</h3>
-          <p className="text-sm text-gray-500">@nikitinteam</p>
+        <div className="flex items-center gap-3 mb-6">
+          <div className="h-20 w-20 rounded-full bg-blueCont2 overflow-hidden mt-2">
+            <img
+              src="https://cdn.pixabay.com/photo/2022/11/08/06/26/woman-7577808_1280.jpg"
+              alt="Profile Avatar"
+              className="w-32 h-32 rounded-full mx-auto object-cover"
+            />
+          </div>
+          <div>
+            <p className="text-blueCont4 text-lg font-bold">Bogdan Nikitin</p>
+            <p className="text-blueCont1">@nikitinteam</p>
+          </div>
         </div>
 
         {/* Libros favoritos */}
         <div className="mt-2 w-full">
-          <h4 className="flex items-center justify-between p-3 bg-blueCont3 text-white rounded-md uppercase mb-4">
+          <h4 className="flex items-center justify-between p-2 bg-blueCont3 text-white rounded-md mb-4">
             <span>Libros Faoritos</span>
           </h4>
         </div>
 
         {/* Libros por Generos*/}
-        <div className="mt-6 w-full">
-          <h4 className="flex items-center justify-between p-3 bg-blueCont3 text-white rounded-md uppercase mb-4">
+        <div className=" w-full">
+          <h4 className="flex items-center justify-between p-2 bg-blueCont3 text-white rounded-md mb-4">
             <span>Generos</span>
           </h4>
           <ul className="space-y-2">
@@ -45,7 +49,6 @@ const Sidebar: React.FC<SidebarProps> = ({ genres, onGenreSelect }) => {
             ))}
           </ul>
         </div>
-        
       </div>
     </aside>
   );
