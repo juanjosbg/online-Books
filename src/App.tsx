@@ -35,7 +35,7 @@ function App() {
         <Sidebar genres={genres} onGenreSelect={handleGenreSelect} />
 
         {/* Main Content */}
-        <main className="w-3/7 bg-greenCont2">
+        <main className="w-full bg-greenCont2">
           <div className="px-4 py-6 sm:px-6 lg:px-8 bg-whiteCont3">
             <SearchBook onSearch={handleSearch} onCancelSearch={handleCancelSearch} />
           </div>

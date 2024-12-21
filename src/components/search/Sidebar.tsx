@@ -7,7 +7,7 @@ interface SidebarProps {
 
 const Sidebar: React.FC<SidebarProps> = ({ genres, onGenreSelect }) => {
   return (
-    <aside className="md:w-1/5 bg-white p-4">
+    <aside className="md:w-1/4 bg-white p-4">
       <div className="flex flex-col items-center">
         {/* Profile Section */}
         <div className="flex items-center gap-3 mb-6">
@@ -27,7 +27,7 @@ const Sidebar: React.FC<SidebarProps> = ({ genres, onGenreSelect }) => {
         {/* Libros favoritos */}
         <div className="mt-2 w-full">
           <h4 className="flex items-center justify-between p-2 bg-blueCont3 text-white rounded-md mb-4">
-            <span>Libros Faoritos</span>
+            <span>Libros Favoritos</span>
           </h4>
         </div>
 
